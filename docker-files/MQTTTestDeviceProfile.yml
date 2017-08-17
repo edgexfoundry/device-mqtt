@@ -1,0 +1,107 @@
+# Copyright 2017 Dell Inc. All rights reserved.
+name: "Test.Device.MQTT.Profile"
+manufacturer: "Dell"
+model: "MQTT-2"
+labels: 
+    - "test"
+description: "Test device profile"
+deviceResources:
+    -   
+        name: randnum
+        description: "device random number"
+        attributes:
+            { name: "randnum" }
+        properties: 
+            value:
+                { type: "Float", size: "4", readWrite: "R", defaultValue: "0.00", minimum: "100.00", maximum: "0.00"  }
+            units:
+                { type: "String", readWrite: "R", defaultValue: "" }
+    -   
+        name: ping
+        description: "device awake"
+        attributes:
+            { name: "ping" }        
+        properties: 
+            value:
+                { type: "String", size: "0", readWrite: "R", defaultValue: "oops" }
+            units:
+                { type: "String", readWrite: "R", defaultValue: "" }                
+    -   
+        name: message
+        description: "device notification message"
+        attributes:
+            { name: "message" }        
+        properties: 
+            value:
+                { type: "String", size: "0", readWrite: "W"  }
+            units:
+                { type: "String", readWrite: "R", defaultValue: "" }                
+
+resources:
+    -
+        name: randnum
+        get:
+          - { index: "1", operation: "get", object: "randnum", property: "value", parameter: "randnum" }
+    -
+        name: ping
+        get:
+          - { index: "1", operation: "get", object: "ping", property: "value", parameter: "ping" }
+    -
+        name: query
+        get:
+          - { index: "1", operation: "get", resource: "randnum" }
+
+commands: 
+  - 
+    name: testrandnum
+    get: 
+        path: "/api/v1/devices/{deviceId}/randnum"
+        responses:
+          - 
+            code: "200"
+            description: ""
+            expectedValues: ["randnum"]
+          -
+            code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - 
+    name: testping
+    get:
+        path: "/api/v1/devices/{deviceId}/ping"
+        responses:
+          -
+            code: "200"
+            description: "ping the device"
+            expectedValues: ["ping"]
+          -
+            code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - 
+    name: testmessage
+    put:
+        path: "/api/v1/devices/{deviceId}/message"
+        parameterNames: ["message"]
+        responses:
+          - 
+            code: "204"
+            description: "Set the message."
+            expectedValues: []
+          -
+            code: "503"
+            description: "service unavailable"
+            expectedValues: []
+  - 
+    name: testquery
+    get:
+        path: "/api/v1/devices/{deviceId}/query"
+        responses:
+          -
+            code: "200"
+            description: ""
+            expectedValues: ["randnum"]
+          -
+            code: "503"
+            description: "service unavailable"
+            expectedValues: []
