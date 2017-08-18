@@ -1,0 +1,31 @@
+The following open source projects are referenced by the MQTT Device Service:
+
+Spring Boot (Apache 2.0) - https://projects.spring.io/spring-boot/
+https://github.com/spring-projects/spring-boot/blob/master/LICENSE.txt
+
+Spring Cloud (Apache 2.0) - http://projects.spring.io/spring-cloud/
+https://github.com/spring-cloud/spring-cloud-release/blob/master/LICENSE.txt
+
+Spring Framework (Apache 2.0) - http://projects.spring.io/spring-framework/
+https://github.com/spring-projects/spring-framework
+
+Log4J (Apache 2.0) - https://logging.apache.org/log4j/2.x/
+https://logging.apache.org/log4j/2.0/license.html
+
+Junit (EPL 1.0) - http://junit.org/junit4/
+http://junit.org/junit4/license.html
+
+GSON (Apache 2.0) - https://github.com/google/gson
+https://github.com/google/gson/blob/master/LICENSE
+
+Resteasy, JBoss (Apache 2.0) - http://resteasy.jboss.org/
+https://github.com/resteasy/Resteasy/blob/master/License.html
+
+Apache Commons Lang version 3.0 (Apache 2.0) - https://commons.apache.org/proper/commons-lang/
+https://commons.apache.org/proper/commons-lang/
+
+Snakeyaml (Apache 2.0) - https://bitbucket.org/asomov/snakeyaml
+https://bitbucket.org/asomov/snakeyaml/src/f563667f64835b7d9461b8b4cc7487dbb2f9faf5/LICENSE.txt
+
+Eclipse Paho Java Client (EPL 1.0) - https://eclipse.org/paho/clients/java/
+https://projects.eclipse.org/projects/technology.paho
