@@ -55,7 +55,7 @@ commands:
   - 
     name: testrandnum
     get: 
-        path: "/api/v1/devices/{deviceId}/randnum"
+        path: "/api/v1/device/{deviceId}/randnum"
         responses:
           - 
             code: "200"
@@ -68,7 +68,7 @@ commands:
   - 
     name: testping
     get:
-        path: "/api/v1/devices/{deviceId}/ping"
+        path: "/api/v1/device/{deviceId}/ping"
         responses:
           -
             code: "200"
@@ -81,7 +81,7 @@ commands:
   - 
     name: testmessage
     put:
-        path: "/api/v1/devices/{deviceId}/message"
+        path: "/api/v1/device/{deviceId}/message"
         parameterNames: ["message"]
         responses:
           - 
@@ -95,7 +95,7 @@ commands:
   - 
     name: testquery
     get:
-        path: "/api/v1/devices/{deviceId}/query"
+        path: "/api/v1/device/{deviceId}/query"
         responses:
           -
             code: "200"

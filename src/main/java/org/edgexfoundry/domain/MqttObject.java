@@ -18,34 +18,32 @@
 
 package org.edgexfoundry.domain;
 
-public class ResponseObject {
+import org.edgexfoundry.domain.meta.DeviceObject;
 
-  private String name;
-  private String value;
+public class MqttObject extends DeviceObject {
 
-  public ResponseObject(String name, String value) {
-    this.name = name;
-    this.value = value;
+  private MqttAttribute attributes;
+
+  public MqttObject(DeviceObject object) {
+    this.setName(object.getName());
+    this.setTag(object.getTag());
+    this.setDescription(object.getDescription());
+    this.setProperties(object.getProperties());
+    this.setAttributes(new MqttAttribute(object.getAttributes()));
   }
 
-  public String getName() {
-    return name;
+  @Override
+  public MqttAttribute getAttributes() {
+    return attributes;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
+  public void setAttributes(MqttAttribute attributes) {
+    this.attributes = attributes;
   }
 
   @Override
   public String toString() {
-    return "{\"" + name + "\":\"" + value + "\"}";
+    return "MqttObject [ " + super.toString() + ", attributes=" + attributes + "]";
   }
+
 }
