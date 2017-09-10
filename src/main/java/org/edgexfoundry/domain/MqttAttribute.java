@@ -18,34 +18,42 @@
 
 package org.edgexfoundry.domain;
 
-public class ResponseObject {
+import org.edgexfoundry.support.logging.client.EdgeXLogger;
+import org.edgexfoundry.support.logging.client.EdgeXLoggerFactory;
+
+import com.google.gson.Gson;
+
+public class MqttAttribute {
+
+  private static final EdgeXLogger logger = EdgeXLoggerFactory.getEdgeXLogger(MqttAttribute.class);
+
+  // Replace these attributes with the MQTT
+  // specific metadata needed by the MQTT Driver
 
   private String name;
-  private String value;
 
-  public ResponseObject(String name, String value) {
-    this.name = name;
-    this.value = value;
+  public MqttAttribute(Object attributes) {
+    try {
+      Gson gson = new Gson();
+      String jsonString = gson.toJson(attributes);
+      MqttAttribute thisObject = gson.fromJson(jsonString, this.getClass());
+
+      this.setName(thisObject.getName());
+
+    } catch (Exception e) {
+      logger.error("Cannot Construct MqttAttribute: " + e.getMessage());
+    }
   }
+
 
   public String getName() {
     return name;
   }
 
+
   public void setName(String name) {
     this.name = name;
   }
 
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public String toString() {
-    return "{\"" + name + "\":\"" + value + "\"}";
-  }
 }
+

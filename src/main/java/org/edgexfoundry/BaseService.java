@@ -1,25 +1,25 @@
 /*******************************************************************************
  * Copyright 2016-2017 Dell Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *
- * @microservice:  device-mqtt
+ * @microservice: device-mqtt
  * @author: Jim White, Dell
  * @version: 1.0.0
  *******************************************************************************/
+
 package org.edgexfoundry;
 
 import javax.annotation.PostConstruct;
+import javax.ws.rs.NotFoundException;
 
 import org.edgexfoundry.controller.AddressableClient;
 import org.edgexfoundry.controller.DeviceServiceClient;
@@ -35,271 +35,271 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.ws.rs.NotFoundException;
-
 @ImportResource("spring-config.xml")
 public class BaseService {
-	
-	private final static EdgeXLogger logger = EdgeXLoggerFactory.getEdgeXLogger(BaseService.class);
-	
-	// service name
-	@Value("${service.name}")
-	private String serviceName;
 
-	// service Address Info
-	@Value("${service.host}")
-	private String host;
+  private static final EdgeXLogger logger = EdgeXLoggerFactory.getEdgeXLogger(BaseService.class);
 
-	@Value("${server.port}")
-	private int port;
+  // service name
+  @Value("${service.name}")
+  private String serviceName;
 
-	// service labels
-	@Value("${service.labels}")
-	private String[] labels;
+  // service Address Info
+  @Value("${service.host}")
+  private String host;
 
-	// service callback root
-	@Value("${service.callback}")
-	private String callbackUrl;
+  @Value("${server.port}")
+  private int port;
 
-	// TODO: This should become a service domain object , not a device service domain object
-	private DeviceService service;
+  // service labels
+  @Value("${service.labels}")
+  private String[] labels;
 
-	// TODO: This should become a BaseServiceClient
-	@Autowired
-	private DeviceServiceClient deviceServiceClient;
+  // service callback root
+  @Value("${service.callback}")
+  private String callbackUrl;
 
-	@Autowired
-	private AddressableClient addressableClient;
-	
-	// service initialization 
-	@Value("${service.connect.retries}")
-	private int initRetries;
+  // TODO: This should become a service domain object , not a device service domain object
+  private DeviceService service;
 
-	@Value("${service.connect.interval}")
-	private long initInterval;
+  // TODO: This should become a BaseServiceClient
+  @Autowired
+  private DeviceServiceClient deviceServiceClient;
 
-	// track initialization attempts
-	private int initAttempts;
+  @Autowired
+  private AddressableClient addressableClient;
 
-	// track initialization success
-	private boolean initialized;
+  // service initialization
+  @Value("${service.connect.retries}")
+  private int initRetries;
 
-	// track registration success
-	private boolean registered;
-	
-	public BaseService() {
-		setInitAttempts(0);
-		setInitialized(false);
-	}
+  @Value("${service.connect.interval}")
+  private long initInterval;
 
-	public int getInitAttempts() {
-		return initAttempts;
-	}
+  // track initialization attempts
+  private int initAttempts;
 
-	public void setInitAttempts(int initAttempts) {
-		this.initAttempts = initAttempts;
-	}
+  // track initialization success
+  private boolean initialized;
 
-	public int getInitRetries() {
-		return initRetries;
-	}
+  // track registration success
+  private boolean registered;
 
-	public void setInitRetries(int initRetries) {
-		this.initRetries = initRetries;
-	}
+  public BaseService() {
+    setInitAttempts(0);
+    setInitialized(false);
+  }
 
-	public long getInitInterval() {
-		return initInterval;
-	}
+  public int getInitAttempts() {
+    return initAttempts;
+  }
 
-	public void setInitInterval(long initInterval) {
-		this.initInterval = initInterval;
-	}
+  public void setInitAttempts(int initAttempts) {
+    this.initAttempts = initAttempts;
+  }
 
-	public boolean isInitialized() {
-		return initialized;
-	}
+  public int getInitRetries() {
+    return initRetries;
+  }
 
-	public void setInitialized(boolean initialized) {
-		this.initialized = initialized;
-	}
+  public void setInitRetries(int initRetries) {
+    this.initRetries = initRetries;
+  }
 
-	public boolean isRegistered() {
-		return registered;
-	}
+  public long getInitInterval() {
+    return initInterval;
+  }
 
-	public void setRegistered(boolean registered) {
-		logger.info("Service registered with id: " + service.getId());
-		this.registered = registered;
-	}
+  public void setInitInterval(long initInterval) {
+    this.initInterval = initInterval;
+  }
 
-	// The base implementation always succeeds, derived classes customize
-	public boolean initialize(String deviceServiceId) {
-		return true;
-	}
-	
-	@PostConstruct
-	private void postConstructInitialize() {
-		logger.debug("post construction initialization");
-		attemptToInitialize();
-	}
-	
-	@Async
-	public void attemptToInitialize() {
-		
-		// count the attempt
-		setInitAttempts(getInitAttempts() + 1);
-		logger.debug("initialization attempt " + getInitAttempts());
+  public boolean isInitialized() {
+    return initialized;
+  }
 
-		// first - get the service information or register service with metadata
-		if(getService() != null) {
-			// if we were able to get the service data we're registered
-			setRegistered(true);
-			// second - invoke any custom initialization method 
-			setInitialized(initialize(getServiceId()));
-		}
+  public void setInitialized(boolean initialized) {
+    this.initialized = initialized;
+  }
 
-		// if both are successful, then we're done
-		if(isRegistered() && isInitialized()) {
-			logger.info("initialization successful.");
-		} else {
-			// otherwise see if we need to keep going
-			if((getInitRetries() == 0) || (getInitAttempts() < getInitRetries())) {
-				logger.debug("initialization unsuccessful. sleeping " + getInitInterval());
-				try {
-					Thread.sleep(getInitInterval());
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
-				// start up the next thread
-				attemptToInitialize();
+  public boolean isRegistered() {
+    return registered;
+  }
 
-			} else {
-				// here, we've failed and run out of retries, so just be done.
-				logger.info("initialization unsuccessful after " + getInitAttempts() + " attempts.  Giving up.");
-				// TODO: what do we do here? exit?
-				Application.exit(-1);
-			}
-		} 
-	}
-	
-	public String getHost() {
-		return host;
-	}
+  public void setRegistered(boolean registered) {
+    logger.info("Service registered with id: " + service.getId());
+    this.registered = registered;
+  }
 
-	public void setHost(String host) {
-		this.host = host;
-	}
+  // The base implementation always succeeds, derived classes customize
+  public boolean initialize(String deviceServiceId) {
+    return true;
+  }
 
-	public int getPort() {
-		return port;
-	}
+  @PostConstruct
+  private void postConstructInitialize() {
+    logger.debug("post construction initialization");
+    attemptToInitialize();
+  }
 
-	public void setPort(int port) {
-		this.port = port;
-	}
+  @Async
+  public void attemptToInitialize() {
 
-	public String[] getLabels() {
-		return labels;
-	}
+    // count the attempt
+    setInitAttempts(getInitAttempts() + 1);
+    logger.debug("initialization attempt " + getInitAttempts());
 
-	public void setLabels(String[] labels) {
-		this.labels = labels;
-	}
+    // first - get the service information or register service with metadata
+    if (getService() != null) {
+      // if we were able to get the service data we're registered
+      setRegistered(true);
+      // second - invoke any custom initialization method
+      setInitialized(initialize(getServiceId()));
+    }
 
-	public String getCallbackUrl() {
-		return callbackUrl;
-	}
+    // if both are successful, then we're done
+    if (isRegistered() && isInitialized()) {
+      logger.info("initialization successful.");
+    } else {
+      // otherwise see if we need to keep going
+      if ((getInitRetries() == 0) || (getInitAttempts() < getInitRetries())) {
+        logger.debug("initialization unsuccessful. sleeping " + getInitInterval());
+        try {
+          Thread.sleep(getInitInterval());
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+        }
+        // start up the next thread
+        attemptToInitialize();
 
-	public void setCallbackUrl(String callbackUrl) {
-		this.callbackUrl = callbackUrl;
-	}
+      } else {
+        // here, we've failed and run out of retries, so just be done.
+        logger.info(
+            "initialization unsuccessful after " + getInitAttempts() + " attempts.  Giving up.");
+        // TODO: what do we do here? exit?
+        Application.exit(-1);
+      }
+    }
+  }
 
-	public String getServiceName() {
-		return serviceName;
-	}
+  public String getHost() {
+    return host;
+  }
 
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
+  public void setHost(String host) {
+    this.host = host;
+  }
 
-	public DeviceService getService() {
-		if(service == null) {
-			try {
-				service = deviceServiceClient.deviceServiceForName(serviceName);
-				setService(service);
-				logger.info("service " + serviceName + " has service id " + service.getId());
-			} catch (NotFoundException n) {
-				try {
-					setService();
-				} catch (NotFoundException e) {
-					logger.info("failed to create service " + serviceName + " in metadata: " + e.getMessage());
-					service = null;
-				}
-			} catch (Exception e) {
-				logger.error("unable to establish connection to metadata " + e.getCause() + " " + e.getMessage());
-				service = null;
-			}
-		}
-		return service;
-	}
+  public int getPort() {
+    return port;
+  }
 
-	private void setService() {
-		logger.info("creating service " + serviceName + " in metadata");
-		service = new DeviceService();
-		
-		// Check for an addressable
-		Addressable addressable = null;
-		try {
-			addressable = addressableClient.addressableForName(serviceName);
-		} catch (NotFoundException e) {
-			// ignore this and create a new addressable
-		}
-		if(addressable == null) {
-			addressable = new Addressable(serviceName, Protocol.HTTP, host, callbackUrl, port);
-			addressable.setOrigin(System.currentTimeMillis());
-			try {
-				addressableClient.add(addressable);
-			} catch (NotFoundException e) {
-				logger.error("Could not add addressable to metadata: " + e.getMessage());
-				service = null;
-				return;
-			}
-		}
-		
-		// Setup the service
-		service.setAddressable(addressable);
-		service.setOrigin(System.currentTimeMillis());
-		service.setAdminState(AdminState.unlocked);
-		service.setOperatingState(OperatingState.enabled);
-		service.setLabels(labels);
-		service.setName(serviceName);
-		try {
-			String id = deviceServiceClient.add(service);
-			service.setId(id);
-		} catch (NotFoundException e) {
-			logger.error("Could not add device service to metadata: " + e.getMessage());
-			service = null;
-		}
-	}
-	
-	public void setService(DeviceService srv) {
-		service = srv;
-		service.setAddressable(srv.getAddressable());
-		service.setLabels(srv.getLabels());
-		setHost(srv.getAddressable().getAddress());
-		setPort(srv.getAddressable().getPort());
-		setCallbackUrl(srv.getAddressable().getPath());
-		setServiceName(srv.getName());
-		setLabels(srv.getLabels());
-	}
+  public void setPort(int port) {
+    this.port = port;
+  }
 
-	public boolean isServiceLocked(){
-		return getService().getAdminState().equals(AdminState.locked);
-	}
+  public String[] getLabels() {
+    return labels;
+  }
 
-	public String getServiceId() {
-		return service.getId();
-	}
+  public void setLabels(String[] labels) {
+    this.labels = labels;
+  }
 
+  public String getCallbackUrl() {
+    return callbackUrl;
+  }
+
+  public void setCallbackUrl(String callbackUrl) {
+    this.callbackUrl = callbackUrl;
+  }
+
+  public String getServiceName() {
+    return serviceName;
+  }
+
+  public void setServiceName(String serviceName) {
+    this.serviceName = serviceName;
+  }
+
+  public DeviceService getService() {
+    if (service == null) {
+      try {
+        service = deviceServiceClient.deviceServiceForName(serviceName);
+        setService(service);
+        logger.info("service " + serviceName + " has service id " + service.getId());
+      } catch (NotFoundException n) {
+        try {
+          setService();
+        } catch (NotFoundException e) {
+          logger
+              .info("failed to create service " + serviceName + " in metadata: " + e.getMessage());
+          service = null;
+        }
+      } catch (Exception e) {
+        logger.error(
+            "unable to establish connection to metadata " + e.getCause() + " " + e.getMessage());
+        service = null;
+      }
+    }
+    return service;
+  }
+
+  private void setService() {
+    logger.info("creating service " + serviceName + " in metadata");
+    service = new DeviceService();
+
+    // Check for an addressable
+    Addressable addressable = null;
+    try {
+      addressable = addressableClient.addressableForName(serviceName);
+    } catch (NotFoundException e) {
+      // ignore this and create a new addressable
+    }
+    if (addressable == null) {
+      addressable = new Addressable(serviceName, Protocol.HTTP, host, callbackUrl, port);
+      addressable.setOrigin(System.currentTimeMillis());
+      try {
+        addressableClient.add(addressable);
+      } catch (NotFoundException e) {
+        logger.error("Could not add addressable to metadata: " + e.getMessage());
+        service = null;
+        return;
+      }
+    }
+
+    // Setup the service
+    service.setAddressable(addressable);
+    service.setOrigin(System.currentTimeMillis());
+    service.setAdminState(AdminState.unlocked);
+    service.setOperatingState(OperatingState.enabled);
+    service.setLabels(labels);
+    service.setName(serviceName);
+    try {
+      String id = deviceServiceClient.add(service);
+      service.setId(id);
+    } catch (NotFoundException e) {
+      logger.error("Could not add device service to metadata: " + e.getMessage());
+      service = null;
+    }
+  }
+
+  public void setService(DeviceService srv) {
+    service = srv;
+    service.setAddressable(srv.getAddressable());
+    service.setLabels(srv.getLabels());
+    setHost(srv.getAddressable().getAddress());
+    setPort(srv.getAddressable().getPort());
+    setCallbackUrl(srv.getAddressable().getPath());
+    setServiceName(srv.getName());
+    setLabels(srv.getLabels());
+  }
+
+  public boolean isServiceLocked() {
+    return getService().getAdminState().equals(AdminState.locked);
+  }
+
+  public String getServiceId() {
+    return service.getId();
+  }
 }
