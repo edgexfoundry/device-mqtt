@@ -194,9 +194,14 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>org.edgexfoundry</id>
-			<name>EdgeX Foundry Nexus Repository</name>
-			<url>${nexusproxy}/content/groups/public/</url>
+			<id>snapshots</id>
+			<name>EdgeX Snapshots Repository</name>
+      <url>${nexusproxy}/${repobasepath}/snapshots</url>
+    </repository>
+		<repository>
+			<id>staging</id>
+			<name>EdgeX Staging Repository</name>
+      <url>${nexusproxy}/${repobasepath}/staging</url>
 		</repository>
 	</repositories>
 </project>
