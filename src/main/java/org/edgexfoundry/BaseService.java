@@ -296,7 +296,11 @@ public class BaseService {
   }
 
   public boolean isServiceLocked() {
-    return getService().getAdminState().equals(AdminState.locked);
+    DeviceService srv = getService();
+    if (srv == null) {
+      return true;
+    }
+    return srv.getAdminState().equals(AdminState.LOCKED);
   }
 
   public String getServiceId() {
