@@ -11,7 +11,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.edgexfoundry</groupId>
 	<artifactId>device-mqtt</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>device-mqtt</name>
 	<description>EdgeX Foundry device-mqtt</description>
 
@@ -31,7 +31,7 @@
                         <artifactItem>
                             <groupId>org.edgexfoundry</groupId>
                             <artifactId>device-mqtt</artifactId>
-                            <version>1.0.0-SNAPSHOT</version>
+                            <version>0.2.0-SNAPSHOT</version>
                             <outputDirectory>.</outputDirectory>
                             <destFileName>device-mqtt.jar</destFileName>
                         </artifactItem>
