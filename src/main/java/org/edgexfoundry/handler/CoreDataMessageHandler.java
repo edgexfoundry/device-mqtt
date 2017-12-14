@@ -102,8 +102,8 @@ public class CoreDataMessageHandler {
     Device device = devices.getDevice(deviceName);
     if (device != null) {
       deviceClient.updateLastConnected(device.getId(), Calendar.getInstance().getTimeInMillis());
-      if (device.getOperatingState().equals(OperatingState.disabled)) {
-        devices.setDeviceByIdOpState(device.getId(), OperatingState.enabled);
+      if (device.getOperatingState().equals(OperatingState.DISABLED)) {
+        devices.setDeviceByIdOpState(device.getId(), OperatingState.ENABLED);
       }
     } else {
       logger.debug("No device found for device name: " + deviceName
@@ -129,8 +129,8 @@ public class CoreDataMessageHandler {
           updateLastConnected(deviceName);
           return resps;
         } else {
-          if (devices.getDevice(deviceName).getOperatingState().equals(OperatingState.enabled)) {
-            devices.setDeviceOpState(deviceName, OperatingState.disabled);
+          if (devices.getDevice(deviceName).getOperatingState().equals(OperatingState.ENABLED)) {
+            devices.setDeviceOpState(deviceName, OperatingState.DISABLED);
           }
 
           logger.error(

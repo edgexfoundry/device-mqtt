@@ -271,8 +271,8 @@ public class BaseService {
     // Setup the service
     service.setAddressable(addressable);
     service.setOrigin(System.currentTimeMillis());
-    service.setAdminState(AdminState.unlocked);
-    service.setOperatingState(OperatingState.enabled);
+    service.setAdminState(AdminState.UNLOCKED);
+    service.setOperatingState(OperatingState.ENABLED);
     service.setLabels(labels);
     service.setName(serviceName);
     try {
