@@ -30,7 +30,7 @@ public class TestMqttDeviceSendor {
 
   private static String MQTT_BROKER = "m11.cloudmqtt.com";
   private static String MQTT_PROTOCOL = "tcp";
-  private static int MQTT_BROKER_PORT = 15757;
+  private static int MQTT_BROKER_PORT = 12439;
   private static String MQTT_CLIENT_ID = "IncomingDataPublisher";
   private static String MQTT_TOPIC = "DataTopic";
   private static String MQTT_USER = "tobeprovided";

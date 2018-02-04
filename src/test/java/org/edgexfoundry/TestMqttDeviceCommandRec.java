@@ -48,7 +48,7 @@ public class TestMqttDeviceCommandRec implements MqttCallback {
 
   private static String REQ_MQTT_BROKER = "m11.cloudmqtt.com";
   private static String REQ_MQTT_PROTOCOL = "tcp";
-  private static int REQ_MQTT_BROKER_PORT = 15757;
+  private static int REQ_MQTT_BROKER_PORT = 12439;
   private static String REQ_MQTT_CLIENT_ID = "OutgoingCommandSubscriber";
   private static String REQ_MQTT_TOPIC = "CommandTopic";
   private static String REQ_MQTT_USER = "tobeprovided";
@@ -56,7 +56,7 @@ public class TestMqttDeviceCommandRec implements MqttCallback {
 
   private static String RESP_MQTT_BROKER = "m11.cloudmqtt.com";
   private static String RESP_MQTT_PROTOCOL = "tcp";
-  private static int RESP_MQTT_BROKER_PORT = 15757;
+  private static int RESP_MQTT_BROKER_PORT = 12439;
   private static String RESP_MQTT_CLIENT_ID = "CommandResponsePublisher";
   private static String RESP_MQTT_TOPIC = "ResponseTopic";
   private static String RESP_MQTT_USER = "tobeprovided";

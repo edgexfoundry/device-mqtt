@@ -20,6 +20,7 @@ package org.edgexfoundry.domain;
 
 import org.edgexfoundry.domain.meta.DeviceObject;
 
+@SuppressWarnings("serial")
 public class MqttObject extends DeviceObject {
 
   private MqttAttribute attributes;

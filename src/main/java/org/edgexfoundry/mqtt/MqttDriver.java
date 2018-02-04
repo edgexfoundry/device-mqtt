@@ -327,8 +327,8 @@ public class MqttDriver {
 
   private Device getDevice(DeviceProfile profile, DeviceService service, Addressable addressable) {
     Device device = new Device();
-    device.setAdminState(AdminState.unlocked);
-    device.setOperatingState(OperatingState.enabled);
+    device.setAdminState(AdminState.UNLOCKED);
+    device.setOperatingState(OperatingState.ENABLED);
     device.setDescription(deviceDescription);
     device.setLabels(deviceLabels);
     device.setName(deviceName);
