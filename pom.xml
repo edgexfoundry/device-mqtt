@@ -12,7 +12,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.edgexfoundry</groupId>
 	<artifactId>device-mqtt</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<name>EdgeX Foundry MQTT Micro Service</name>
 	<description>EdgeX Foundry MQTT Device Service - initially created by the EdgeX Foundry DS SDK</description>
 
@@ -24,7 +24,7 @@
 		<core-metadata-client.version>0.5.0-SNAPSHOT</core-metadata-client.version>
 		<core-domain.version>0.5.0-SNAPSHOT</core-domain.version>
 		<core-data-client.version>0.5.0-SNAPSHOT</core-data-client.version>
-		<core-test.version>0.5.0-SNAPSHOT</core-test.version>
+		<core-test.version>0.6.0-SNAPSHOT</core-test.version>
 		<core-exception.version>0.5.0-SNAPSHOT</core-exception.version>
 		<support-logging-client.version>0.5.0-SNAPSHOT</support-logging-client.version>
 		<spring.cloud.version>Brixton.SR5</spring.cloud.version>
