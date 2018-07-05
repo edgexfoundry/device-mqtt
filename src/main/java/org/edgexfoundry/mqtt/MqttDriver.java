@@ -403,12 +403,16 @@ public class MqttDriver {
     } else {
       msg = new CmdMsg(attribute.getName(), operation);
     }
+
+    responseProcessor.addResponse(msg.getUuid());
+
     if (sendor.sendMessage(gson.toJson(msg).getBytes())) {
       logger.info(
           operation + " request for " + attribute.getName() + " sent to: " + addressable.getName());
       logger.debug("Outgoing message:  " + gson.toJson(msg));
       return msg.getUuid();
     } else {
+      responseProcessor.removeResponse(msg.getUuid());
       String errorMsg = "Problem sending command for attribute (" + attribute.getName()
           + ") message to addressable:  " + addressable.getName();
       logger.error(errorMsg);

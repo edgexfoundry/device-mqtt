@@ -61,7 +61,6 @@ public class CommandResponseMessageProcessor {
   }
 
   public String getResponse(String uuid) {
-    addResponse(uuid);
     logger.debug("Response registered for uuid: " + uuid);
     try {
       while (NO_RESP.equals(responses.get(uuid))) {
@@ -76,8 +75,12 @@ public class CommandResponseMessageProcessor {
     }
   }
 
-  private void addResponse(String uuid) {
+  public void addResponse(String uuid) {
     responses.put(uuid, NO_RESP);
+  }
+
+  public void removeResponse(String uuid) {
+    responses.remove(uuid);
   }
 
   // get the data out of the MQTT JSON message.
