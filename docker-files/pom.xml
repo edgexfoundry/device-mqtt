@@ -11,13 +11,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.edgexfoundry</groupId>
 	<artifactId>device-mqtt</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<name>device-mqtt</name>
 	<description>EdgeX Foundry device-mqtt</description>
 
     <properties>
         <nexusproxy>https://nexus.edgexfoundry.org</nexusproxy>
         <repobasepath>content/repositories</repobasepath>
+        <stagingpath>staging</stagingpath>
     </properties>
     
     <build>
@@ -31,7 +32,7 @@
                         <artifactItem>
                             <groupId>org.edgexfoundry</groupId>
                             <artifactId>device-mqtt</artifactId>
-                            <version>0.5.0-SNAPSHOT</version>
+                            <version>0.6.0-SNAPSHOT</version>
                             <outputDirectory>.</outputDirectory>
                             <destFileName>device-mqtt.jar</destFileName>
                         </artifactItem>
@@ -49,7 +50,7 @@
 		<repository>
                        <id>staging</id>
                        <name>EdgeX Staging Repository</name>
-                       <url>${nexusproxy}/${repobasepath}/staging</url>
+                       <url>${nexusproxy}/${repobasepath}/${stagingpath}</url>
                </repository>
                <repository>
                        <id>snapshots</id>
